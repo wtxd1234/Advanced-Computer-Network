@@ -22,7 +22,7 @@ Here is a comparison of Local ISPs, Regional/Global ISPs, and Internet Exchange 
 | **Traffic Handling** | Sends its users' traffic "upstream" to its transit provider for destinations outside its network. | Carries traffic over long distances across its backbone network. | Facilitates direct, local traffic exchange between its members, bypassing upstream providers. This reduces cost and latency. |
 | **Analogy** | The local roads in your neighborhood. | The national and international highway system. | A central airport where different airlines meet to exchange passengers directly. |
 
-### Avoiding dependency on a single ISP
+### <mark> _*Avoiding dependency on a single ISP*_ </mark>
 
 It is a fundamental principle of building a resilient, high-performance, and cost-effective network. Relying on just one provider is like putting all your eggs in one basket—if anything happens to that basket, you lose everything.
 
