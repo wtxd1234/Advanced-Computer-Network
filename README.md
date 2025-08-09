@@ -1,3 +1,3 @@
 # Advanced-Computer-Network
-[EXAM](EXAM.md)
-[Case Study](CaseStudy.md)
+* [EXAM](EXAM.md)
+* [Case Study](CaseStudy.md)
