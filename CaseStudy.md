@@ -298,7 +298,7 @@ The case also introduces **OpenFlow**, which is an "open standard" that the cont
 
 This case asks us to explore two questions:
 
-## Analysis (分析): How does separating the control and data planes in SDN improve network agility and fault tolerance compared to traditional networks?
+## <mark> Analysis (分析): How does separating the control and data planes in SDN improve network agility and fault tolerance compared to traditional networks? </mark>
 
 The core idea of SDN is to separate the network's "brain" (the control plane) from its "muscle" (the data plane). This simple change has a huge impact.
 
@@ -321,7 +321,7 @@ Fault tolerance is the network's ability to survive when a device or link fails.
 
 In summary, by decoupling the control and data planes, SDN transforms the network from a collection of independently managed devices into a single, programmable system. This directly improves **agility** by centralizing control and **fault tolerance** by enabling an instant, network-wide response to failures.
 
-## Evaluation (评估): What is the impact of open standards like OpenFlow on vendor interoperability and innovation? What challenges still prevent SDN from being adopted everywhere? 
+## <mark> Evaluation (评估): What is the impact of open standards like OpenFlow on vendor interoperability and innovation? What challenges still prevent SDN from being adopted everywhere? </mark> 
 
 ### Part 1: Impact of Open Standards like OpenFlow
 
@@ -347,3 +347,92 @@ While SDN is powerful, it has not been adopted everywhere yet. The question asks
 * **Integration with Existing Networks:** Most companies cannot afford to throw away their existing equipment. They must slowly integrate new SDN systems with their older, traditional networks. Managing this hybrid environment can be very difficult.
 
 ---
+
+## Case Study 5: SDN Flow Tables and Controller Selection
+
+This case study looks deeper into the technical details of how SDN works, focusing on the "internal mechanisms of SDN, particularly the role of flow tables".
+
+### The Scenario (场景)
+
+Imagine an OpenFlow switch as a traffic officer who has a rulebook. This rulebook is the **flow table (流表)**.
+
+* **How it works:** When a data packet arrives, the switch looks in its flow table.
+    * If there's a matching rule (e.g., "packets for the finance server go out Port 5"), the switch forwards the packet instantly.
+    * If there's no rule for that packet, the switch pauses and asks the main SDN controller (the "brain") for instructions.
+* **Communication:** The controller and switch are always talking. The case highlights three types of messages they use to "manage network behavior dynamically":
+    * **Controller-to-switch messages:** The controller sends new rules or commands down to the switch.
+    * **Asynchronous messages:** The switch sends messages up to the controller, for example, to report an event or to ask about a new, unknown packet.
+    * **Symmetric messages:** Used for housekeeping messages like checking if the other side is still active.
+* **Controller Software:** The case also introduces real-world examples of SDN controller software like **NOX, POX, Ryu, and Floodlight**, noting they are used in different scenarios.
+
+This case study asks two questions:
+
+## <mark> Analysis (分析): Compare how controller-to-switch and asynchronous messages work together to manage the flow tables. How do they create dynamic control over the network? </mark>
+
+Let's think of this as a conversation between a manager (the SDN Controller) and an employee (the OpenFlow Switch).
+
+### 1. Asynchronous Messages: The Employee Asking for Help
+
+An **asynchronous message (异步消息)** is sent from the **switch up to the controller**. It is sent when the switch encounters a situation it doesn't know how to handle.
+
+* **Primary Role:** Its main job is to report events. The most important event is called a **"Packet-In"**. This happens when a data packet arrives at the switch, but the switch has no rule in its flow table that matches the packet.
+* **The "Question":** The switch sends the packet to the controller and essentially asks, "I've never seen a packet like this before. What should I do with it?".
+* **In summary:** Asynchronous messages are **reactive**. They are triggered by real-time events in the network, giving the controller visibility into what's happening.
+
+### 2. Controller-to-Switch Messages: The Manager Giving Orders
+
+A **controller-to-switch message (控制器到交换机消息)** is sent from the **controller down to the switch**. It is used by the controller to program and manage the switch's behavior.
+
+* **Primary Role:** Its main job is to install or modify rules in the switch's flow table. The most important message for this is the **"Flow-Mod"** (Flow Modification) message.
+* **The "Answer":** After receiving a "Packet-In" message, the controller makes a decision and sends a "Flow-Mod" message back. This message contains a new rule, telling the switch, "From now on, whenever you see a packet like that, send it out through Port 7."
+* **In summary:** Controller-to-switch messages are **proactive and authoritative**. They are the commands that install intelligence into the switches.
+
+### How They Enable Dynamic Network Control
+
+These two message types work together in a perfect feedback loop that allows for "dynamic network control".
+
+Here is the process:
+
+1.  **New Traffic Arrives:** A packet from a new application arrives at a switch.
+2.  **Switch Asks (Asynchronous):** The switch has no rule, so it sends an **asynchronous "Packet-In"** message to the controller. 
+3.  **Controller Decides:** The central controller analyzes the packet and decides on a policy.
+4.  **Controller Commands (Controller-to-Switch):** The controller sends a **"Flow-Mod" message** back to the switch, installing a new rule in its flow table. 
+5.  **Network Adapts:** The switch now has a rule for this new traffic and can forward all future packets of this type instantly without asking the controller again.
+
+This constant conversation allows the network to "learn" and adapt in real-time. The administrator can change policies on the central controller at any moment, and these messages ensure that the changes are instantly applied across the network. This is the essence of dynamic control.
+
+## <mark> Evaluation (评估): How would you evaluate which SDN controller (like NOX, POX, Ryu, or Floodlight) is better for an enterprise (企业) environment versus a research (研究) environment? What factors should you consider? </mark>
+
+This is a practical evaluation. There is no single "best" controller; the right choice depends entirely on the job it needs to do.
+
+### Part 1: Evaluating Controllers for Enterprise vs. Research
+
+First, let's understand the different needs of these two environments.
+* **Enterprise (企业):** A business environment. The top priorities are high performance, stability, security, and professional support. Downtime loses money.
+* **Research (研究):** An academic or experimental environment. The top priorities are flexibility, ease of use for creating new prototypes, and good community support.
+
+Here is an evaluation of the controllers mentioned in the case study:
+
+* **For Enterprise Environments:**
+    * **Floodlight:** A very strong choice. It is written in Java (a common enterprise language), is known for being high-performance and stable, and was backed by a commercial company, which means it was built for production use.
+    * **Ryu:** Also an excellent choice that is often used in production. It is written in Python and has a rich library of well-tested components, making it both powerful and flexible.
+
+* **For Research Environments:**
+    * **POX:** The ideal choice for **education and research**. It is written in Python and is intentionally kept simple, making it very easy for students and researchers to quickly build and test new networking ideas. It is not designed for high-performance needs.
+    * **NOX:** The original OpenFlow controller, primarily used for **research**. While it is the ancestor of POX, it is more complex (written in C++). Today, it is mostly of academic interest for understanding the history of SDN.
+
+### Part 2: Criteria for Selecting a Controller
+
+The case suggests that when "selecting appropriate controllers for different deployment scenarios", we must consider several factors. Here are the most important criteria:
+
+* **Performance and Scalability:** How many switches can the controller manage? How quickly can it process requests? This is a critical factor for large enterprises. 
+* **Language Support:** What programming language does the controller use (e.g., Python, Java)? Your team should be comfortable with the language to build custom applications on top of the controller. 
+* **Integration Capabilities:** How well does the controller work with other systems, such as cloud platforms like OpenStack? This is important for building a fully automated environment. 
+* **Reliability (High Availability):** Can the controller run in a cluster, so that if one server fails, another takes over instantly? This is essential for any enterprise network.
+* **Community and Vendor Support:** Is there a large, active open-source community to help solve problems? For an enterprise, is commercial, paid support available from a vendor?
+* **Feature Set:** Does the controller come with pre-built applications, such as a firewall, load balancer, or a graphical user interface (GUI)? These can save a lot of development time.
+
+In conclusion, a researcher would likely choose **POX** for its simplicity, while a large company would evaluate **Floodlight** or **Ryu** based on their specific needs for performance, reliability, and integration.
+
+---
+
