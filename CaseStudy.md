@@ -280,3 +280,70 @@ A much better approach would be to build separate, specialized platforms for sma
 
 ---
 
+## Case Study 4: SDN Architecture and OpenFlow
+
+This case study introduces a major change in networking called Software-Defined Networking (SDN).
+
+### The Scenario (场景)
+
+**The Old Problem:**
+Traditional network devices (like routers and switches) have always been a problem because they are "tightly coupled". This means the device's hardware (the part that forwards data, called the **data plane**) and its software (the part that thinks and makes routing decisions, called the **control plane**) are locked together in one box. This makes networks rigid, difficult to manage, and leads to "vendor lock-in", where you are stuck using equipment from only one company.
+
+**The New Solution: SDN (软件定义网络)**
+SDN is a "paradigm shift" that separates, or "decouples," these two planes.
+* **The Control Plane (控制平面)** is moved out of the hardware and into a centralized software application called an SDN Controller. This controller acts as the "brain" of the entire network.
+* **The Data Plane (数据平面)** stays in the switches, but the switches become simple devices that just follow instructions given by the controller.
+
+The case also introduces **OpenFlow**, which is an "open standard" that the controller uses to communicate with the switches, enabling "dynamic policy enforcement and simplified network management".
+
+This case asks us to explore two questions:
+
+## Analysis (分析): How does separating the control and data planes in SDN improve network agility and fault tolerance compared to traditional networks?
+
+The core idea of SDN is to separate the network's "brain" (the control plane) from its "muscle" (the data plane). This simple change has a huge impact.
+
+### How SDN Improves Agility (敏捷性)
+
+Agility means being able to change the network quickly and easily.
+
+* **Traditional Networks are Rigid:** In a traditional network, every router and switch has its own brain. To make a network-wide change, like updating a security policy, an engineer must manually connect to hundreds of devices one by one to update them. This process is very slow, expensive, and often leads to errors. The source calls this a problem of "rigidity" and "slow innovation".
+* **SDN is Agile:** With SDN, the entire network's intelligence is in one central software program, the SDN controller. An administrator can program a change just once in the controller, and the controller instantly pushes the new rules to all the switches. This allows for "dynamic policy enforcement and simplified network management". For example, blocking a new security threat across the entire network can be done in seconds instead of hours.
+
+### How SDN Improves Fault Tolerance (容错性)
+
+Fault tolerance is the network's ability to survive when a device or link fails.
+
+* **Traditional Networks are Slow to React:** In traditional "distributed autonomous systems", each router only knows about its immediate neighbors. If a link breaks, the routers must send messages back and forth to slowly figure out a new path around the problem. During this time, data can be lost.
+* **SDN Reacts Instantly:** The central SDN controller has a complete, top-down view of the entire network at all times. It knows every link and every possible path.
+    * Because of this global view, the controller can pre-calculate backup paths for all important traffic.
+    * The moment a link fails, the controller detects it instantly.
+    * It immediately tells the switches to divert traffic to the pre-planned backup path. The recovery is almost instantaneous.
+
+In summary, by decoupling the control and data planes, SDN transforms the network from a collection of independently managed devices into a single, programmable system. This directly improves **agility** by centralizing control and **fault tolerance** by enabling an instant, network-wide response to failures.
+
+## Evaluation (评估): What is the impact of open standards like OpenFlow on vendor interoperability and innovation? What challenges still prevent SDN from being adopted everywhere? 
+
+### Part 1: Impact of Open Standards like OpenFlow
+
+An **open standard (开放标准)** like OpenFlow is essentially a common language that all network devices can agree to speak. Its impact has been huge.
+
+**On Vendor Interoperability (厂商互操作性):**
+
+* **The Problem It Solves: Vendor Lock-In.** Before SDN, if you bought switches from Company A, you had to use management software from Company A. Their equipment was not designed to work with competitors. This is called "vendor lock-in", and it was expensive for customers.
+* **The Impact of OpenFlow:** OpenFlow creates a standard communication channel. This means a customer can buy a simple, affordable switch from any hardware vendor and manage it with powerful SDN controller software from a completely different company. As long as both support OpenFlow, they work together. This breaks vendor lock-in and gives customers more freedom and buying power.
+
+**On Innovation (创新):**
+
+* **The Problem It Solves: Slow Innovation.** In the past, network innovation was controlled by a few large hardware vendors. Customers had to wait for them to release new features in their next hardware models.
+* **The Impact of OpenFlow:** By separating software (the controller) from hardware (the switch), OpenFlow allows anyone to innovate. A university researcher, a startup, or a company's own IT team can now write a new application on the SDN controller to create a custom network service. They don't need to wait for a hardware vendor. This has dramatically "foster[ed] innovation" in networking.
+
+### Part 2: Challenges for Widespread SDN Adoption
+
+While SDN is powerful, it has not been adopted everywhere yet. The question asks what challenges remain.
+
+* **Complexity:** Moving to a completely new way of networking is complex. It requires network engineers to learn new skills in software and automation, which is a big change from traditional networking.
+* **Controller Reliability:** The SDN controller is the single brain of the network. If the controller fails, the entire network could potentially stop working. Building a controller that is powerful enough to manage a large network and also extremely reliable is a major technical challenge.
+* **Security:** Because the controller is the central point of control, it is a very valuable target for cyberattacks. A security breach of the controller could compromise the entire network. This creates significant security implications.
+* **Integration with Existing Networks:** Most companies cannot afford to throw away their existing equipment. They must slowly integrate new SDN systems with their older, traditional networks. Managing this hybrid environment can be very difficult.
+
+---
