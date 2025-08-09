@@ -1,7 +1,6 @@
-# Case Study (Yawar's Exam Tips)
+# Case Study (Yawar's Exam Tips with some Ching Chong warning)
 
 This note is based on "Advanced_Computer_Networks_Case_Studies_Complete.docx". 
-⚠️It might contain some "Ching Chong" in the context, do ignore it if u feeling uncomfortable on seeing it. 
 
 It contains nine detailed case studies covering modern networking topics such as:
 * Data center architectures (like Spine-Leaf vs. 3-Tier) 
